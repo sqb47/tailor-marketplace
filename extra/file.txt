@@ -1,0 +1,13 @@
+      <NavBar title="hello"/>
+      <Text>hello to my new application</Text>
+      <StatusBar style="auto" />
+      <Button color="success">info</Button>
+      <NavBar title="hello"/>
+      <Input placeholder="regular" style={styles.text} color="#ff0c00" bottomHelp = {true}/>
+      <Input placeholder="text" type="email-address" placeholderTextColor="#4F8EC9" />
+      <Input placeholder="text" type="email-address" />
+      <Radio label="Primary color Radio" color="primary"  />
+      <Radio label="Info color Radio" color="info"  />
+      <Radio label="Error color Radio" color="error"  />
+      <Radio label="Warning color Radio" color="warning"  />
+      <Radio label="Success color Radio" color="success"  />
