@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Button, NavBar, Input, Block, Radio, Card, Icon } from 'galio-framework';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
 import Image from "../test.png";
 
 
@@ -27,6 +27,9 @@ function logo(){
     </View>
   );
 }
+AsyncStorage.getItem('UID123', (err, result) => {
+  console.log(result);
+});
 
 export default function Home({ navigation }) {
   const [people, setPeople] = useState([

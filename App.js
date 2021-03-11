@@ -7,7 +7,8 @@ import Signup from './screens/Signup';
 import Home from './screens/Home';
 import Search from './screens/Search';
 import Account from './screens/Account';
-import Cart from './screens/Cart'
+import Cart from './screens/Cart';
+import Personalinfo from './screens/Personalinfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -24,6 +25,7 @@ function MyStack() {
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Personal Information" component={Personalinfo} />
     </Stack.Navigator>
   );
 }
@@ -79,3 +81,5 @@ const styles = StyleSheet.create({
     borderColor: "#ff0c00"
   }
 });
+
+

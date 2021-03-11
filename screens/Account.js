@@ -15,14 +15,14 @@ export default function Home({ navigation }) {
               <Text style={styles.options}>Cart</Text>
               
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity >
               <Text style={styles.options}>Notifications</Text>
             </TouchableOpacity>
             
           </View>
-          <View style={styles.userinfo}>
-            <TouchableOpacity>
-              <Text style={styles.options}>My Details</Text>
+          <View style={styles.userinfo} >
+            <TouchableOpacity onPress={() => navigation.navigate("Personal Information")}>
+              <Text style={styles.options}>Personal Information</Text>
               
             </TouchableOpacity>
             <TouchableOpacity>

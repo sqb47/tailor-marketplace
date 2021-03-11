@@ -8,19 +8,25 @@ import {
   Text,
   Icon,
 } from "galio-framework";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, AsyncStorage } from "react-native";
 
 let correct = false;
 
 function temp () {
-  fetch("http://192.168.10.3:3001/login",{method: 'GET'})
-  .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-    .catch((error) => {
-      console.error(error);
-    });
+  // fetch("http://192.168.10.3:3001/login",{method: 'GET'})
+  // .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       console.log(responseJson);
+  //     })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+  AsyncStorage.getItem('UID123', (err, result) => {
+    console.log('consoool',result);
+  });
+  AsyncStorage.clear( (err, result) => {
+    console.log('clear',result);
+  });
 }
 
 export default function Login({ navigation }) {
