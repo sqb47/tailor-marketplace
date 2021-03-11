@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Button,
   NavBar,
@@ -8,7 +8,7 @@ import {
   Text,
   Icon,
 } from "galio-framework";
-import { StyleSheet, View, AsyncStorage } from "react-native";
+import { StyleSheet, View, AsyncStorage, ScrollView } from "react-native";
 
 let correct = false;
 
