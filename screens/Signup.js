@@ -17,32 +17,44 @@ import {
   passwordValidation,
 } from "../validation/validation";
 
+import RadioForm from 'react-native-radio-form'
+
 var emailValidationMessage = "Please Enter Valid E-Mail";
-var passwordValidationMessage = "";
 var phoneValidationMessage = "Please Enter Valid Phone Number";
 var validMessage=''
+
+const mockData = [
+  {
+      label: 'Customer'
+  },
+  {
+      label: 'Tailor'
+  },
+];
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [accountType, setAccountType] = useState("Customer")
 
-  const [emailValidation, setEmailValidation] = useState(true);
-  const [passwordValidation, setPasswordValidation] = useState(true);
-  const [confirmPasswordValidation, setConfirmPasswordValidation] = useState(
+  const [emailValid, setEmailValidation] = useState(true);
+  const [passwordValid, setPasswordValidation] = useState(true);
+  const [confirmPasswordValid, setConfirmPasswordValidation] = useState(
     true
   );
-  const [phoneValidation, setPhoneValidation] = useState(true);
+  const [phoneValid, setPhoneValidation] = useState(true);
 
   function validate() {
+console.log(accountType)
+
     setPhoneValidation(true);
     setEmailValidation(true);
     setPasswordValidation(true);
     setConfirmPasswordValidation(true);
 
     if (emptyFields(email, phone, password, confirmPassword)) {
-      passwordValidationMessage = "Please Enter Password"
       if (email == "") {
         setEmailValidation(false);
       }
@@ -57,8 +69,9 @@ export default function Signup() {
       }
     } else {
       setEmailValidation(emailValidation(email));
-      if(passwordValidation(password, confirmPassword)){
-        passwordValidationMessage = "Password do not match"
+      if( !(passwordValidation(password, confirmPassword))){
+        validMessage = "Password do not match"
+        alert(validMessage)
         setPasswordValidation(false);
         setConfirmPasswordValidation(false);
       }
@@ -71,7 +84,7 @@ export default function Signup() {
         <View style={styles.form}>
           <Icon name="user" family="Feather" color="black" size={100} />
           <Input
-            style={emailValidation?styles.input:styles.inputInvalid}
+            style={emailValid?styles.input:styles.inputInvalid}
             rounded
             placeholder="Enter your email"
             type="email-address"
@@ -83,12 +96,10 @@ export default function Signup() {
             right
             iconeSize={13}
             onChangeText={(text) => setEmail(text)}
-            // help= 'djfdksfjslkj'
-            // bottomHelp
           />
 
           <Input
-          style={phoneValidation?styles.input:styles.inputInvalid}
+          style={phoneValid?styles.input:styles.inputInvalid}
             rounded
             placeholder="Enter Phone number"
             type="number-pad"
@@ -100,12 +111,10 @@ export default function Signup() {
             right
             iconeSize={13}
             onChangeText={(text) => setPhone(text)}
-            // help={phoneValidationMessage}
-            // bottomHelp
           />
 
           <Input
-            style={passwordValidation?styles.input:styles.inputInvalid}
+            style={passwordValid?styles.input:styles.inputInvalid}
             rounded
             placeholder="Enter your password"
             password
@@ -115,12 +124,10 @@ export default function Signup() {
             onChangeText={(text) => setPassword(text)}
             hellp=''
             bottomHelp
-            // help={passwordValidationMessage}
-            // bottomHelp
           />
 
           <Input
-            style={confirmPasswordValidation?styles.input:styles.inputInvalid}
+            style={confirmPasswordValid?styles.input:styles.inputInvalid}
             rounded
             placeholder="Conform password"
             password
@@ -128,8 +135,20 @@ export default function Signup() {
             placeholderTextColor="#928988"
             label="Password"
             onChangeText={(text) => setConfirmPassword(text)}
-            // help={passwordValidationMessage}
-            // bottomHelp
+          />
+
+          <RadioForm
+            style={{ width: 350 - 30 }}
+            dataSource={mockData}
+            itemShowKey="label"
+            itemRealKey="value"
+            circleSize={16}
+            formHorizontal={true}
+            labelHorizontal={true}
+            onPress={({label}) => setAccountType(label)} 
+            innerColor="#19ce0f"
+            outerColor='#19ce0f'
+            initial={0}
           />
 
           <Button

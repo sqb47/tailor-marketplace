@@ -13,10 +13,10 @@ export function emailValidation(email){
 }
 
 export function phoneValidation(phone){
-    
-    const re = /^[0-9]$/;
-    return (e.test(String(phone)) && phone.length==11);
+    const re = /^[0-9]*$/;
+    return (re.test(String(phone)));
 }
 export function passwordValidation(password, confirmPassword){
+    console.log(password == confirmPassword)
     return (password == confirmPassword)
 }

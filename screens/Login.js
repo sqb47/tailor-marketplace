@@ -8,33 +8,64 @@ import {
   Text,
   Icon,
 } from "galio-framework";
-import { StyleSheet, View, AsyncStorage, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
+import { AsyncStorage } from '@react-native-community/async-storage';
+import { emptyFields, emailValidation } from '../validation/validation'
 
 let correct = false;
 
-function temp () {
-  // fetch("http://192.168.10.3:3001/login",{method: 'GET'})
-  // .then((response) => response.json())
-  //     .then((responseJson) => {
-  //       console.log(responseJson);
-  //     })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-  AsyncStorage.getItem('UID123', (err, result) => {
-    console.log('consoool',result);
-  });
-  AsyncStorage.clear( (err, result) => {
-    console.log('clear',result);
-  });
-}
+
+
+
+// function temp () {
+//   fetch("http://192.168.10.3:3001/login",{method: 'GET'})
+//   .then((response) => response.json())
+//       .then((responseJson) => {
+//         console.log(responseJson);
+//       })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+//   AsyncStorage.getItem('UID123', (err, result) => {
+//     console.log('consoool',result);
+//   });
+//   AsyncStorage.clear( (err, result) => {
+//     console.log('clear',result);
+//   });
+// }
+
+
 
 export default function Login({ navigation }) {
+  const [email, setEmail]=useState('');
+  const [password, setPassword]= useState('')
+
+  const [passwordValid, setPasswordValid]= useState(true)
+  const [emailValid, setEmailValid]= useState(true)
+  
+
+  function validate() {
+    setEmailValid(true)
+    setPasswordValid(true)
+
+    if (emptyFields(email, password)){
+      if (email==''){
+        setEmailValid(false)
+      }
+      if (password==''){
+        setPasswordValid(false)
+      }
+    }else{
+      setEmailValid(emailValidation(email))
+    }
+    
+  }
+
   return (
     <View style={styles.container}>
       <Icon name="user" family="Feather" color="black" size={100} />
       <Input
-        style={(styles.input, correct ? styles.valid : styles.invalid)}
+        style={emailValid ? styles.valid : styles.invalid}
         rounded
         placeholder="Enter your email"
         type="email-address"
@@ -45,21 +76,22 @@ export default function Login({ navigation }) {
         family="Entypo"
         right
         iconeSize={13}
-        onPress={() => alert("pressed")}
+        onChangeText={(text) => setEmail(text)}
       />
 
       <Input
-        style={styles.input}
+        style={passwordValid ? styles.valid : styles.invalid}
         rounded
         placeholder="Enter your password"
         password
         viewPass
         placeholderTextColor="#928988"
         label="Password"
+        onChangeText={(text) => setPassword(text)}
       />
 
       <Button round uppercase color="success"
-      onPress={() => temp()}
+      onPress={() => validate()}
       >
         login
       </Button>
