@@ -1,90 +1,145 @@
 import React, { useState } from "react";
-import {
-  Button,
-  NavBar,
-  Input,
-  Block,
-  Radio,
-  Text,
-  Icon,
-} from "galio-framework";
+import { Button, Input, Icon } from "galio-framework";
 import { StyleSheet, View, ScrollView } from "react-native";
+import RadioForm from "react-native-radio-form";
+import Toast from 'react-native-toast-message';
 
 import {
   emptyFields,
   emailValidation,
   phoneValidation,
   passwordValidation,
+  nameValidation,
 } from "../validation/validation";
-
-import RadioForm from 'react-native-radio-form'
+import { signup } from "../apis/apis";
 
 var emailValidationMessage = "Please Enter Valid E-Mail";
 var phoneValidationMessage = "Please Enter Valid Phone Number";
-var validMessage=''
+var validMessage = "";
 
-const mockData = [
+const radioData = [
   {
-      label: 'Customer'
+    label: "Customer",
   },
   {
-      label: 'Tailor'
+    label: "Tailor",
   },
 ];
 
-export default function Signup() {
+export default function Signup({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [accountType, setAccountType] = useState("Customer")
+  const [name, setName] = useState("");
+  const [accountType, setAccountType] = useState("Customer");
 
-  const [emailValid, setEmailValidation] = useState(true);
-  const [passwordValid, setPasswordValidation] = useState(true);
-  const [confirmPasswordValid, setConfirmPasswordValidation] = useState(
-    true
-  );
-  const [phoneValid, setPhoneValidation] = useState(true);
+  const [emailValid, setEmailValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
+  const [nameValid, setnameValidation] = useState(true);
+  const [phoneValid, setPhoneValid] = useState(true);
+  const [confirmPasswordValid, setConfirmPasswordValidation] = useState(true);
 
-  function validate() {
-console.log(accountType)
+  const [loading, setLoading] = useState(false);
 
-    setPhoneValidation(true);
-    setEmailValidation(true);
-    setPasswordValidation(true);
+  async function validate() {
+    setLoading(true);
+    setPhoneValid(true);
+    setnameValidation(true);
+    setEmailValid(true);
+    setPasswordValid(true);
     setConfirmPasswordValidation(true);
 
-    if (emptyFields(email, phone, password, confirmPassword)) {
+    if (emptyFields(email, phone, password, confirmPassword, name)) {
       if (email == "") {
-        setEmailValidation(false);
+        setEmailValid(false);
+      }
+      if (name == "") {
+        setnameValidation(false);
       }
       if (password == "") {
-        setPasswordValidation(false);
+        setPasswordValid(false);
       }
       if (confirmPassword == "") {
         setConfirmPasswordValidation(false);
       }
       if (phone == "") {
-        setPhoneValidation(false);
+        setPhoneValid(false);
       }
     } else {
-      setEmailValidation(emailValidation(email));
-      if( !(passwordValidation(password, confirmPassword))){
-        validMessage = "Password do not match"
-        alert(validMessage)
-        setPasswordValidation(false);
+      setEmailValid(emailValidation(email));
+
+      if (!passwordValidation(password, confirmPassword)) {
+        validMessage = "Password do not match";
+        alert(validMessage);
+        setPasswordValid(false);
         setConfirmPasswordValidation(false);
       }
-      setPhoneValidation(phoneValidation(phone));
+
+      setPhoneValid(phoneValidation(phone));
+      setnameValidation(nameValidation(name));
     }
+    if (
+      emailValid &&
+      passwordValid &&
+      nameValid &&
+      phoneValid &&
+      confirmPasswordValid
+    ) {
+      var object = {
+        fullname: name,
+        email: email,
+        number: phone,
+        password: password,
+        accounttype: accountType,
+      };
+      await signup(object);
+
+      Toast.show({
+        type: 'success',
+        position: 'bottom',
+        text1: 'success',
+        text2: 'Account registered successfully',
+        visibilityTime: 4000,
+        autoHide: true,
+        bottomOffset: 40,
+      });
+    }
+    setLoading(false);
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: 'success',
+      text2: 'Account registered successfully',
+      visibilityTime: 2000,
+      autoHide: true,
+      bottomOffset: 10,
+    }); 
+    //navigation.navigate("Login")
   }
+
   return (
     <View style={styles.container}>
+      
       <ScrollView style={styles.fullWidth}>
         <View style={styles.form}>
           <Icon name="user" family="Feather" color="black" size={100} />
           <Input
-            style={emailValid?styles.input:styles.inputInvalid}
+            style={nameValid ? styles.input : styles.inputInvalid}
+            rounded
+            placeholder="Enter Your Full Name"
+            placeholderTextColor="#928988"
+            label="Full Name"
+            icon="user"
+            iconColor="black"
+            family="Entypo"
+            right
+            iconeSize={13}
+            onChangeText={(text) => setName(text)}
+          />
+
+          <Input
+            style={emailValid ? styles.input : styles.inputInvalid}
             rounded
             placeholder="Enter your email"
             type="email-address"
@@ -99,7 +154,7 @@ console.log(accountType)
           />
 
           <Input
-          style={phoneValid?styles.input:styles.inputInvalid}
+            style={phoneValid ? styles.input : styles.inputInvalid}
             rounded
             placeholder="Enter Phone number"
             type="number-pad"
@@ -114,7 +169,7 @@ console.log(accountType)
           />
 
           <Input
-            style={passwordValid?styles.input:styles.inputInvalid}
+            style={passwordValid ? styles.input : styles.inputInvalid}
             rounded
             placeholder="Enter your password"
             password
@@ -122,12 +177,12 @@ console.log(accountType)
             placeholderTextColor="#928988"
             label="Password"
             onChangeText={(text) => setPassword(text)}
-            hellp=''
+            hellp=""
             bottomHelp
           />
 
           <Input
-            style={confirmPasswordValid?styles.input:styles.inputInvalid}
+            style={confirmPasswordValid ? styles.input : styles.inputInvalid}
             rounded
             placeholder="Conform password"
             password
@@ -139,15 +194,15 @@ console.log(accountType)
 
           <RadioForm
             style={{ width: 350 - 30 }}
-            dataSource={mockData}
+            dataSource={radioData}
             itemShowKey="label"
             itemRealKey="value"
             circleSize={16}
             formHorizontal={true}
             labelHorizontal={true}
-            onPress={({label}) => setAccountType(label)} 
+            onPress={({ label }) => setAccountType(label)}
             innerColor="#19ce0f"
-            outerColor='#19ce0f'
+            outerColor="#19ce0f"
             initial={0}
           />
 
@@ -156,12 +211,15 @@ console.log(accountType)
             uppercase
             color="success"
             style={styles.button}
+            loading={loading}
             onPress={() => validate()}
           >
             Signup
           </Button>
+
         </View>
       </ScrollView>
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </View>
   );
 }
@@ -187,9 +245,11 @@ const styles = StyleSheet.create({
   },
   inputInvalid: {
     width: 300,
-    borderColor:'red'
+    borderColor: "red",
   },
   button: {
-    marginBottom: 70,
+    marginBottom: 80,
+    marginTop: 20,
+    width: 300,
   },
 });

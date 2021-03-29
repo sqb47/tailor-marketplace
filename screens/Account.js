@@ -1,14 +1,44 @@
 import React, {useState} from 'react';
-import { Button, NavBar, Input, Block, Radio, Card } from 'galio-framework';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Button, NavBar, Input, Block, Radio, Card, Text } from 'galio-framework';
+import { StyleSheet, View, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
+import AsyncStorage from "@react-native-community/async-storage";
+
+ 
+
+async function logout() {
+  await AsyncStorage.clear()
+
+  console.log(global.userData)
+  global.userData=undefined
+  console.log(global.userData)
+}
+
 
 export default function Home({ navigation }) {
+  function checkLogin() {
+    console.log('login check')
+    if (global.userData==undefined){
+      return(
+        <View>
+          <Text>not logged in yet</Text>
+            <Button round uppercase color="success" onPress={() => navigation.navigate("Login")} >login</Button>
+        </View>
+      )
+    }else{
+      return(
+        <View>
+          <Text h3 color="#19ce0f">{global.userData.fullname}</Text>
+            
+        </View>
+      )
+    }
     
+  }  
+
     return(
         <View style={styles.container}>
           <View style={styles.username}>
-            <Text>Not logged in yet</Text>
-            <Button round uppercase color="success" onPress={() => navigation.navigate("Login")} >login</Button>
+            { checkLogin() }
           </View>
           <View style={styles.info}>
             <TouchableOpacity>
@@ -43,8 +73,8 @@ export default function Home({ navigation }) {
           </View>
 
           <View style={styles.logout}>
-          <TouchableOpacity>
-            <Text style={styles.options}>Logout</Text>
+          <TouchableOpacity onPress={() =>  logout()}>
+            <Text style={styles.options} >Logout</Text>
           </TouchableOpacity>
             
           </View>

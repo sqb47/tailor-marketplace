@@ -17,6 +17,9 @@ export function phoneValidation(phone){
     return (re.test(String(phone)));
 }
 export function passwordValidation(password, confirmPassword){
-    console.log(password == confirmPassword)
     return (password == confirmPassword)
+}
+export function nameValidation(name){
+    const re = /^[a-zA-Z ]*$/;
+    return (re.test(String(name)));
 }

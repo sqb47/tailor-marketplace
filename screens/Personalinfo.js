@@ -1,43 +1,64 @@
-import React, { Component, useState } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { Table, Row, Rows, Col, cols } from 'react-native-table-component';
+import React, { Component, useState, useEffect } from "react";
+import { StyleSheet, View } from "react-native";
+import { Block, DeckSwiper, Text, Icon } from "galio-framework";
+import AsyncStorage from "@react-native-community/async-storage";
 
-var cars = ["Saab", "Volvo"];
-var items = [
-    [1, 2],
-    [3, 4],
-    [5, 6]
-  ];
 
-  let UID123_object = {
-    name: 'Chris',
-    age: 30,
-    traits: { hair: 'brown', eyes: 'brown' }
-  };
-  // You only need to define what will be added or updated
-  let UID123_delta = {
-    age: 31,
-    traits: { eyes: 'blue', shoe_size: 10 }
-  };
-  
- 
-export default class ExampleOne extends Component {
-  
+console.log('personal info',global.userData.fullname)
+//console.log(userInfo)
 
-  render() {
-    const state = this.state;
-    return (
-      <View style={styles.container}>
-        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-          <Rows data={items} textStyle={styles.text}/>
-        </Table>
+export default function PersonalInfo({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Icon name="user" family="Entypo" color="#19ce0f" size={80} />
+
+      <View style={styles.userInfo}>
+        <View style={styles.field}>
+          <Text h5 color="#19ce0f">
+            Name
+          </Text>
+          <Text p>{global.userData.fullname}</Text>
+        </View>
+
+        <View style={styles.field}>
+          <Text h5 color="#19ce0f">
+            Email
+          </Text>
+          <Text p>{global.userData.email}</Text>
+        </View>
+
+        <View style={styles.field}>
+          <Text h5 color="#19ce0f">
+            Phone Number
+          </Text>
+          <Text p>{global.userData.number}</Text>
+        </View>
+
+        <View style={styles.field}>
+          <Text h5 color="#19ce0f">
+            Account Type
+          </Text>
+          <Text p>{global.userData.accounttype}</Text>
+        </View>
       </View>
-    )
-  }
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  container: {padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
-  text: { margin: 6, textAlign:'center' }
+  container: {
+    padding: 16,
+    paddingTop: 30,
+    backgroundColor: "#fff",
+    flex: 1,
+    alignItems: "center",
+  },
+  userInfo: {
+    width: "100%",
+  },
+  field: {
+    marginVertical: 10,
+  },
+  head: { height: 40, backgroundColor: "#f1f8ff" },
+  text: { margin: 6 },
 });
