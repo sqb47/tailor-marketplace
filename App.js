@@ -8,6 +8,8 @@ import Home from './screens/Home';
 import Search from './screens/Search';
 import Account from './screens/Account';
 import Cart from './screens/Cart';
+import Shop from './screens/Shop';
+import MeasurmentForm from './screens/MeasurmentForm'
 import Personalinfo from './screens/Personalinfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -20,12 +22,13 @@ const Stack = createStackNavigator();
 
 function MyStack() {
   return (
-    
     <Stack.Navigator>
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="Personal Information" component={Personalinfo} />
+      <Stack.Screen name="Shop" component={Shop} />
+      <Stack.Screen name="MeasurmentForm" component={MeasurmentForm} />
     </Stack.Navigator>
   );
 }
@@ -35,12 +38,6 @@ const Tab = createBottomTabNavigator();
 function MyTabs() {
   return (
     <Tab.Navigator>
-      {/* <Tab.Screen name="Login" component={Login} 
-      options={{ tabBarIcon:()=>(<View><Icon name="user" family="Feather" color="black" size={25} /></View>) }}
-      />
-      <Tab.Screen name="Signup" component={Signup}
-      options={{ tabBarIcon:()=>(<View><Icon name="user" family="Feather" color="black" size={25} /></View>) }}
-      /> */}
       <Tab.Screen name="Home" component={Home}
       options={{ tabBarIcon:()=>(<View><Icon name="home" family="Feather" color="black" size={25} /></View>) }}
       />

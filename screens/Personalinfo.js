@@ -1,47 +1,151 @@
 import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { Block, DeckSwiper, Text, Icon } from "galio-framework";
+import { Block, DeckSwiper, Text, Icon, Button } from "galio-framework";
 import AsyncStorage from "@react-native-community/async-storage";
+import { ScrollView } from "react-native-gesture-handler";
 
-
-console.log('personal info',global.userData.fullname)
+// console.log('personal info',global.userData.fullname)
 //console.log(userInfo)
 
 export default function PersonalInfo({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Icon name="user" family="Entypo" color="#19ce0f" size={80} />
+    <ScrollView style={styles.scrollview}>
+      <View style={styles.container}>
 
-      <View style={styles.userInfo}>
-        <View style={styles.field}>
+        <Icon name="user" family="Entypo" color="#19ce0f" size={80} />
+
+        <View style={styles.section}>
+
           <Text h5 color="#19ce0f">
-            Name
+            User Info
           </Text>
-          <Text p>{global.userData.fullname}</Text>
+
+          <View style={styles.sectionBody}>
+            <View style={styles.field}>
+              <Text p color="#000">
+                Name:
+              </Text>
+              <Text p>
+                {global.userData == undefined
+                  ? "-------"
+                  : global.userData.fullname}
+              </Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Email:
+              </Text>
+              <Text p>
+                {global.userData == undefined
+                  ? "-------"
+                  : global.userData.email}
+              </Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Phone Number:
+              </Text>
+              <Text p>
+                {global.userData == undefined
+                  ? "-------"
+                  : global.userData.fullname}
+              </Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Account Type:
+              </Text>
+              <Text p>
+                {global.userData == undefined
+                  ? "-------"
+                  : global.userData.accounttype}
+              </Text>
+            </View>
+
+            <View style={styles.fieldButton}>
+              <Button round color="success">Edit</Button>
+            </View>
+
+          </View>
         </View>
 
-        <View style={styles.field}>
-          <Text h5 color="#19ce0f">
-            Email
-          </Text>
-          <Text p>{global.userData.email}</Text>
-        </View>
+        <View style={styles.section}>
 
-        <View style={styles.field}>
           <Text h5 color="#19ce0f">
-            Phone Number
+            User Measurment
           </Text>
-          <Text p>{global.userData.number}</Text>
-        </View>
 
-        <View style={styles.field}>
-          <Text h5 color="#19ce0f">
-            Account Type
-          </Text>
-          <Text p>{global.userData.accounttype}</Text>
+          <View style={styles.sectionBody}>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Neck Collar:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Shoulder:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Chest:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Waist:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Hips:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Sleve Length:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Length:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Ghera:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+            
+            <View style={styles.fieldButton}>
+              <Button round color="success" onPress={() => navigation.navigate('MeasurmentForm')}>
+                Edit
+              </Button>
+            </View>
+
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -53,11 +157,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-  userInfo: {
+  scrollview: {
+    flex: 1,
+  },
+  section: {
+    marginVertical: 10,
     width: "100%",
+  },
+  sectionBody: {
+    width: "100%",
+    borderTopWidth: 1,
+    borderColor: "lightgrey",
+    padding: 15,
   },
   field: {
     marginVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  fieldButton:{
+    alignSelf:'center'
   },
   head: { height: 40, backgroundColor: "#f1f8ff" },
   text: { margin: 6 },

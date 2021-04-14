@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, NavBar, Input, Block, Radio, Card, Text } from 'galio-framework';
 import { StyleSheet, View, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
 import AsyncStorage from "@react-native-community/async-storage";
@@ -15,36 +15,61 @@ async function logout() {
 
 
 export default function Home({ navigation }) {
-  function checkLogin() {
+
+  const [loginValid,setLoginValid]=useState(false)
+
+
+  function checkLogin(isLoggedIn) {
     console.log('login check')
-    if (global.userData==undefined){
+    console.log(global.userData)
+    if ( isLoggedIn ){
+      return(
+        <View>
+          <Text h3 color="#19ce0f">username</Text>
+            
+        </View>
+      )
+    }else{
       return(
         <View>
           <Text>not logged in yet</Text>
             <Button round uppercase color="success" onPress={() => navigation.navigate("Login")} >login</Button>
         </View>
       )
-    }else{
-      return(
-        <View>
-          <Text h3 color="#19ce0f">{global.userData.fullname}</Text>
-            
-        </View>
-      )
     }
     
-  }  
+  }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action and update data
+      if (global.userData==undefined){
+        setLoginValid(false)
+      }
+      else{
+        setLoginValid(true)
+      }
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  // useEffect(() => {
+  //   console.log('hello')
+  // }, []);
 
     return(
         <View style={styles.container}>
           <View style={styles.username}>
-            { checkLogin() }
+            { checkLogin(loginValid) }
+            
           </View>
           <View style={styles.info}>
-            <TouchableOpacity>
-              <Text style={styles.options}>Cart</Text>
-              
+            <TouchableOpacity onPress={() => navigation.navigate("Shop")}>
+              <Text style={styles.options}>Shop {/*cart*/}</Text> 
             </TouchableOpacity>
+
             <TouchableOpacity >
               <Text style={styles.options}>Notifications</Text>
             </TouchableOpacity>
@@ -53,8 +78,8 @@ export default function Home({ navigation }) {
           <View style={styles.userinfo} >
             <TouchableOpacity onPress={() => navigation.navigate("Personal Information")}>
               <Text style={styles.options}>Personal Information</Text>
-              
             </TouchableOpacity>
+
             <TouchableOpacity>
               <Text style={styles.options}>Saved Address</Text>
             </TouchableOpacity>
@@ -64,9 +89,11 @@ export default function Home({ navigation }) {
           <TouchableOpacity>
             <Text style={styles.options}>Rate The App</Text>
           </TouchableOpacity>
+
           <TouchableOpacity>
               <Text style={styles.options}>Contact Us</Text>
           </TouchableOpacity>
+
           <TouchableOpacity>
             <Text style={styles.options}>FAQs</Text>
           </TouchableOpacity>
@@ -96,33 +123,34 @@ export default function Home({ navigation }) {
       },
       username:{
         flex:2,
+        marginLeft:5
       },
       info:{
         flex:2,
         margin:5,
-        backgroundColor:"#e3e3e3",
-        borderRadius:20,
+        borderTopWidth:1,
+        borderColor:'grey',
         justifyContent:"center",
       },
       userinfo:{
         flex:2,
         margin:5,
-        backgroundColor:"#e3e3e3",
-        borderRadius:20,
+        borderTopWidth:1,
+        borderColor:'grey',
         justifyContent:"center",
       },
       contactInfo:{
         flex:3,
         margin:5,
-        backgroundColor:"#e3e3e3",
-        borderRadius:20,
+        borderTopWidth:1,
+        borderColor:'grey',
         justifyContent:"center",
       },
       logout:{
         flex:1,
         margin:3,
-        backgroundColor:"#e3e3e3",
-        borderRadius:20,
+        borderTopWidth:1,
+        borderColor:'grey',
         justifyContent:"center",
       },
       options:{

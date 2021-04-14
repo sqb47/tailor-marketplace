@@ -23,10 +23,10 @@ export default function Login({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   async function validate() {
-    Toast.show({
-      text1: 'Hello',
-      text2: 'This is some something 👋'
-    });
+    // Toast.show({
+    //   text1: 'Hello',
+    //   text2: 'This is some something 👋'
+    // });
     setLoading(true);
     setEmailValid(true);
     setPasswordValid(true);
