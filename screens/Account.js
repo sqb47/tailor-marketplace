@@ -71,7 +71,7 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
 
             <TouchableOpacity >
-              <Text style={styles.options}>Notifications</Text>
+              <Text style={styles.options}>Orders</Text>
             </TouchableOpacity>
             
           </View>

@@ -65,9 +65,9 @@ export default function PersonalInfo({ navigation }) {
               </Text>
             </View>
 
-            <View style={styles.fieldButton}>
+            {/* <View style={styles.fieldButton}>
               <Button round color="success">Edit</Button>
-            </View>
+            </View> */}
 
           </View>
         </View>
@@ -132,6 +132,13 @@ export default function PersonalInfo({ navigation }) {
             <View style={styles.field}>
               <Text p color="#000">
                 Ghera:
+              </Text>
+              <Text p>-----</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text p color="#000">
+                Shalwar Length:
               </Text>
               <Text p>-----</Text>
             </View>

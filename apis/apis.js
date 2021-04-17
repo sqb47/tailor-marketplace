@@ -50,4 +50,24 @@ export async function signup(object) {
     });
 }
 
-export async function updateMeasurements(object) {}
+export async function updateMeasurements(object) {
+  console.log("update measurement");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/measurement", {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      global.userData=data
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+}

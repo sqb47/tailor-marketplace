@@ -23,3 +23,7 @@ export function nameValidation(name){
     const re = /^[a-zA-Z ]*$/;
     return (re.test(String(name)));
 }
+export function numberValidation(number){
+    const re = /^[0-9]*$/;
+    return (re.test(String(number)));
+}
