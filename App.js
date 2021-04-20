@@ -11,6 +11,7 @@ import Cart from './screens/Cart';
 import Shop from './screens/Shop';
 import MeasurmentForm from './screens/MeasurmentForm'
 import Personalinfo from './screens/Personalinfo';
+import Product from './screens/Product'
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -29,6 +30,8 @@ function MyStack() {
       <Stack.Screen name="Personal Information" component={Personalinfo} />
       <Stack.Screen name="Shop" component={Shop} />
       <Stack.Screen name="MeasurmentForm" component={MeasurmentForm} />
+      <Stack.Screen name="Product" component={Product} />
+      
     </Stack.Navigator>
   );
 }

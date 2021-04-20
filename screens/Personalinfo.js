@@ -84,63 +84,81 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Neck Collar:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.neck}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Shoulder:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.shoulder}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Chest:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.chest}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Waist:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.waist}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Hips:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.hips}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Sleve Length:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.slevelength}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Length:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.length}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Ghera:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.ghera}</Text>
             </View>
 
             <View style={styles.field}>
               <Text p color="#000">
                 Shalwar Length:
               </Text>
-              <Text p>-----</Text>
+              <Text p>{global.userData == undefined
+                  ? "-------"
+                  : global.userData.measurement.salwarlength}</Text>
             </View>
             
             <View style={styles.fieldButton}>

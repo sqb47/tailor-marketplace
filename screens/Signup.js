@@ -43,6 +43,7 @@ export default function Signup({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   async function validate() {
+    
     setLoading(true);
     setPhoneValid(true);
     setnameValidation(true);

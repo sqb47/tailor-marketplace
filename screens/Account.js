@@ -5,12 +5,14 @@ import AsyncStorage from "@react-native-community/async-storage";
 
  
 
-async function logout() {
+async function logout(nav) {
   await AsyncStorage.clear()
 
   console.log(global.userData)
   global.userData=undefined
   console.log(global.userData)
+  nav.navigate("Login")
+
 }
 
 
@@ -40,11 +42,22 @@ export default function Home({ navigation }) {
     
   }
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener('focus',async () => {
+      global.cart=[]
+      try {
+        const value = await AsyncStorage.getItem('userData');
+        if (value !== null) {
+          // We have data!!
+          console.log('hello===========\n',value);
+        }
+      } catch (error) {
+        // Error retrieving data
+      }
       // The screen is focused
       // Call any action and update data
       if (global.userData==undefined){
         setLoginValid(false)
+        navigation.navigate("Login")
       }
       else{
         setLoginValid(true)
@@ -100,7 +113,7 @@ export default function Home({ navigation }) {
           </View>
 
           <View style={styles.logout}>
-          <TouchableOpacity onPress={() =>  logout()}>
+          <TouchableOpacity onPress={() =>  logout(navigation)}>
             <Text style={styles.options} >Logout</Text>
           </TouchableOpacity>
             

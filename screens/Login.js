@@ -50,6 +50,8 @@ export default function Login({ navigation }) {
       await login(object);
     }
     setLoading(false);
+
+    navigation.navigate("Account")
   }
 
   return (
