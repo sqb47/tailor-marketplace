@@ -94,3 +94,26 @@ export async function updateproducts(object) {
       console.error(error);
     });
 }
+
+export async function getTailors() {
+  var tailors
+  console.log("get tailors");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/tailors", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      tailors=data
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+    return tailors
+}

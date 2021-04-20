@@ -44,20 +44,23 @@ export default function Home({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus',async () => {
       global.cart=[]
+      var userid=''
       try {
-        const value = await AsyncStorage.getItem('userData');
-        if (value !== null) {
+        userid = await AsyncStorage.getItem('userData');
+        if (userid !== null) {
           // We have data!!
-          console.log('hello===========\n',value);
+          console.log('hello===========\n',userid);
         }
       } catch (error) {
         // Error retrieving data
+        console.log('hello===========\n',error);
+        navigation.navigate("Login")
       }
       // The screen is focused
       // Call any action and update data
       if (global.userData==undefined){
         setLoginValid(false)
-        navigation.navigate("Login")
+        // navigation.navigate("Login")
       }
       else{
         setLoginValid(true)

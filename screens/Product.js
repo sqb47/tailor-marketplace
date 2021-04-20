@@ -13,9 +13,9 @@ export default function Product({ navigation, route }) {
     var product = route.params
     console.log(product)
 
-    function cart(params) {
+    function cart() {
       global.cart.push(product)
-      console.log(global.cart)
+      console.log(global.userData)
       Toast.show({
         type: 'success',
         position: 'bottom',

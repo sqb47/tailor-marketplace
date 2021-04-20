@@ -8,7 +8,8 @@ import { ScrollView } from "react-native-gesture-handler";
 //console.log(userInfo)
 
 export default function PersonalInfo({ navigation }) {
-  return (
+  try{
+    return (
     <ScrollView style={styles.scrollview}>
       <View style={styles.container}>
 
@@ -26,7 +27,7 @@ export default function PersonalInfo({ navigation }) {
                 Name:
               </Text>
               <Text p>
-                {global.userData == undefined
+                {global.userData == undefined 
                   ? "-------"
                   : global.userData.fullname}
               </Text>
@@ -48,7 +49,7 @@ export default function PersonalInfo({ navigation }) {
                 Phone Number:
               </Text>
               <Text p>
-                {global.userData == undefined
+                {global.userData == undefined 
                   ? "-------"
                   : global.userData.fullname}
               </Text>
@@ -59,7 +60,7 @@ export default function PersonalInfo({ navigation }) {
                 Account Type:
               </Text>
               <Text p>
-                {global.userData == undefined
+                {global.userData == undefined 
                   ? "-------"
                   : global.userData.accounttype}
               </Text>
@@ -84,7 +85,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Neck Collar:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement == undefined
                   ? "-------"
                   : global.userData.measurement.neck}</Text>
             </View>
@@ -93,7 +94,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Shoulder:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement == undefined
                   ? "-------"
                   : global.userData.measurement.shoulder}</Text>
             </View>
@@ -102,7 +103,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Chest:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement == undefined
                   ? "-------"
                   : global.userData.measurement.chest}</Text>
             </View>
@@ -111,7 +112,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Waist:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement == undefined
                   ? "-------"
                   : global.userData.measurement.waist}</Text>
             </View>
@@ -120,7 +121,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Hips:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement == undefined
                   ? "-------"
                   : global.userData.measurement.hips}</Text>
             </View>
@@ -129,7 +130,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Sleve Length:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement.slevelength == undefined
                   ? "-------"
                   : global.userData.measurement.slevelength}</Text>
             </View>
@@ -138,7 +139,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Length:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement.length == undefined
                   ? "-------"
                   : global.userData.measurement.length}</Text>
             </View>
@@ -147,7 +148,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Ghera:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement.ghera == undefined
                   ? "-------"
                   : global.userData.measurement.ghera}</Text>
             </View>
@@ -156,7 +157,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p color="#000">
                 Shalwar Length:
               </Text>
-              <Text p>{global.userData == undefined
+              <Text p>{global.userData == undefined && global.userData.measurement.salwarlength == undefined
                   ? "-------"
                   : global.userData.measurement.salwarlength}</Text>
             </View>
@@ -172,6 +173,13 @@ export default function PersonalInfo({ navigation }) {
       </View>
     </ScrollView>
   );
+  }catch(e){
+    navigation.navigate('MeasurmentForm')
+    return(
+      <View></View>
+    )
+  }
+  
 }
 
 const styles = StyleSheet.create({

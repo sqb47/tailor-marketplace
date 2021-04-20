@@ -89,10 +89,10 @@ export default function MeasurmentForm({ navigation }) {
       chest:chest,
       waist:waist,
       hips:hips,
-      sleve:sleve ,
+      slevelength:sleve ,
       length:length, 
       ghera:ghera,
-      shalwar:shalwar
+      salwarlength:shalwar
     }
     await updateMeasurements(data)
 
