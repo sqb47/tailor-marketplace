@@ -16,8 +16,9 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
-import { getTailors } from "../apis/apis";
+import { getTailors, getUser } from "../apis/apis";
 import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
+import AsyncStorage from "@react-native-community/async-storage";
 
 function logo() {
   return (
@@ -30,27 +31,13 @@ function logo() {
 export default function Home({ navigation }) {
   console.log("djsfhsjdgfngfvgfuhndksf");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  
   var done = false;
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
-      var temp = [
-        { name: "name", key: "1" },
-        { name: "name", key: "2" },
-        { name: "name", key: "3" },
-        { name: "name", key: "4" },
-        { name: "name", key: "5" },
-        { name: "name", key: "6" },
-        { name: "name", key: "7" },
-        { name: "name", key: "8" },
-        { name: "name", key: "9" },
-      ];
-      temp.forEach(myFunction);
-
-      function myFunction(value, index, array) {
-        console.log(value, index);
-      }
-      console.log("jkbgfdjksafjkegfejksbgf");
+      
       //setData(getTailors())
       // The screen is focused
       // Call any action and update data
@@ -61,6 +48,7 @@ export default function Home({ navigation }) {
   }, [navigation]);
 
   async function reload() {
+    setLoading(true)
     var temp = await getTailors();
     var products = [];
     temp.forEach(myFunction);
@@ -73,13 +61,36 @@ export default function Home({ navigation }) {
         products.push(value);
       }
     }
+    var userid
+    try {
+      userid = await AsyncStorage.getItem('userData');
+      if (userid !== null) {
+        // We have data!!
+        console.log('hello===========\n',userid);
+        var data={
+          id:userid
+        }
+        // await getUser(data)
+
+      }else{
+        console.log('hello+++++++++++\n',userid);
+        navigation.navigate("Account")
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log('hello===========\n',error);
+      navigation.navigate("Account")
+    }
     setData(products);
+    
+    setLoading(false)
   }
 
   function search(navigation) {
     return (
       <View style={styles.search}>
         <Button
+        loading={loading}
           onlyIcon
           icon="reload1"
           iconFamily="AntDesign"
@@ -118,7 +129,7 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <NavBar
-        style={StyleSheet.navbar}
+        style={styles.header}
         title=""
         left={logo()}
         right={search(navigation)}
@@ -130,7 +141,7 @@ export default function Home({ navigation }) {
         data={data}
         keyExtractor={(e) => e._id}
         renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => alert("Simple Button pressed")}>
+            <TouchableOpacity onPress={() =>navigation.navigate('Product',item)}>
               <View style={styles.card}>
                 <Image
                   source={require("../assets/placeholder.jpeg")}
@@ -154,41 +165,14 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
         )}
       />
-      {/* <View style={styles.body}>
-        <FlatList
-          style={styles.products}
-          data={product}
-          keyExtractor={(e) => e._id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-            onPress={() =>navigation.navigate('Product',item)}>
-              <View style={styles.card}>
-              <Image source={require("../assets/placeholder.jpeg")} style={styles.image} />
-              <Text h5 color="grey">
-                {item.name}
-              </Text>
-              <Text p color="grey">
-                {item.description}
-              </Text>
-              <View style={styles.cardFooter}>
-                <Text p color="#19ce0f">
-                  Rs: {item.price}
-                </Text>
-                <Text p color="#19ce0f">
-                  Days to complete: {item.days}
-                </Text>
-              </View>
-            </View>
-            </TouchableOpacity>
-            
-          )}
-        />
-      </View> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  header:{
+    marginTop:-25
+  },
   container: {
     flex: 1,
     paddingTop: 20,

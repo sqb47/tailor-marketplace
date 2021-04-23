@@ -22,7 +22,7 @@ export async function login(object) {
     global.userData=userData
   try {
     await AsyncStorage.clear()
-    await AsyncStorage.setItem("userData", JSON.stringify(userData._id));
+    await AsyncStorage.setItem("userData", JSON.stringify(userData));
     
   } catch (err) {
     console.log(err);
@@ -116,4 +116,29 @@ export async function getTailors() {
       console.error(error);
     });
     return tailors
+}
+
+export async function getUser(object) {
+  var userData;
+  console.log("getUser working");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/user", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      userData=data
+      console.log('responce from apisssss============',data);
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+    console.log('responce from apisssss++++++++++++++++',userData);
+    global.userData=userData
 }

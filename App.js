@@ -36,12 +36,22 @@ function MyStack() {
   );
 }
 
+function HomeStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Product" component={Product} />
+      
+    </Stack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home}
+      <Tab.Screen name="Home" component={HomeStack}
       options={{ tabBarIcon:()=>(<View><Icon name="home" family="Feather" color="black" size={25} /></View>) }}
       />
       <Tab.Screen name="Search" component={Search}

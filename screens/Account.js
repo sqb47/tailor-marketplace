@@ -50,6 +50,9 @@ export default function Home({ navigation }) {
         if (userid !== null) {
           // We have data!!
           console.log('hello===========\n',userid);
+        }else{
+          console.log('hello+++++++++++\n',userid);
+          navigation.navigate("Login")
         }
       } catch (error) {
         // Error retrieving data
@@ -96,8 +99,8 @@ export default function Home({ navigation }) {
               <Text style={styles.options}>Personal Information</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
-              <Text style={styles.options}>Saved Address</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("MeasurmentForm")}>
+              <Text style={styles.options}>Update Measurement</Text>
             </TouchableOpacity>
             
           </View>
