@@ -72,6 +72,8 @@ export default function Cart({ navigation }) {
         onPress={() => empty()}>
         Empty Cart
       </Button>
+
+      
       </View>
     </View>
   ) : (

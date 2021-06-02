@@ -295,8 +295,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     height: 250,
     resizeMode: "stretch",
   },

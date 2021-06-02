@@ -23,7 +23,10 @@ import AsyncStorage from "@react-native-community/async-storage";
 function logo() {
   return (
     <View style={styles.search}>
-      <Text>logo</Text>
+      <Image
+        source={require("../assets/logo.png")}
+        style={styles.logo}
+      />
     </View>
   );
 }
@@ -183,12 +186,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderColor: "#ff0c00",
   },
-  card: {
-    margin: 10,
-  },
   cardImage: {
-    width: 340,
-    height: 250,
     resizeMode: "stretch",
   },
   navbar: {
@@ -202,15 +200,22 @@ const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
     marginVertical: 20,
+    marginHorizontal:10,
+    
     borderRadius: 10,
     borderColor: "lightgrey",
   },
   image: {
     width: "100%",
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     height: 250,
     resizeMode: "stretch",
+  },
+  logo:{
+    resizeMode: "stretch",
+    width:40,
+    height:40
   },
   cardFooter: {
     flexDirection: "row",

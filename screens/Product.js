@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, NavBar, Input, Block, Radio, Card, Text } from 'galio-framework';
 import { StyleSheet, View, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { SliderBox } from 'react-native-image-slider-box';
 import AsyncStorage from "@react-native-community/async-storage";
 import Toast from 'react-native-toast-message';
 
@@ -8,7 +9,13 @@ import Toast from 'react-native-toast-message';
 
 
 export default function Product({ navigation, route }) {
-  
+
+  var imgs=[
+    require("../assets/placeholder.jpeg"),
+    require("../assets/placeholder.jpeg"),
+    require("../assets/placeholder.jpeg"),
+    require("../assets/placeholder.jpeg"),
+  ]
   
     var product = route.params
     console.log(product)
@@ -28,10 +35,56 @@ export default function Product({ navigation, route }) {
 
     }
 
+    function Buttons() {
+      if(global.userData.accounttype == 'Tailor'){
+        return(
+          <View style={styles.options}>
+            <Button
+            onlyIcon
+            icon="edit"
+            iconFamily="AntDesign"
+            iconSize={25}
+            iconColor="white"
+            style={{ width: 50, height: 50 }}
+            round
+            color='warning'
+            onPress={() => console.log('sk')}>
+              Delete
+            </Button>
+
+            <Button
+            onlyIcon
+            icon="delete"
+            iconFamily="AntDesign"
+            iconSize={25}
+            iconColor="white"
+            style={{ width: 50, height: 50 }}
+            round
+            color='red'
+            onPress={() => console.log('sk')}>
+              update
+            </Button>
+          </View>
+        )
+      } else {
+        return(
+          <Button
+            round
+            color='success'
+            style={styles.button}
+            onPress={() => cart()}>
+              Add to Cart
+            </Button>
+          )
+      }
+      
+    }
+
     return(
         <View style={styles.container}>
             <View style={styles.card}>
-              <Image source={require("../assets/placeholder.jpeg")} style={styles.image} />
+              {/* <Image source={require("../assets/placeholder.jpeg")} style={styles.image} /> */}
+              <SliderBox images={imgs} />
               <Text h5 color="grey">
                 {product.name}
               </Text>
@@ -48,13 +101,11 @@ export default function Product({ navigation, route }) {
               </View>
             </View>
 
-            <Button
-            round
-            color='success'
-            style={styles.button}
-            onPress={() => cart()}>
-              Add to Cart
-            </Button>
+            <Buttons></Buttons>
+
+            
+
+            
             <Toast ref={(ref) => Toast.setRef(ref)} />
         </View>
     )
@@ -65,12 +116,12 @@ const styles = StyleSheet.create({
     container: {
       flex:1
     },
-    header: {
+    options: {
       width: "100%",
       height: 70,
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "center",
+      justifyContent:'flex-end',
       elevation: 1,
     },
     rowAlign: {
@@ -81,8 +132,8 @@ const styles = StyleSheet.create({
       paddingHorizontal: 10,
     },
     card: {
-      borderWidth: 1,
       marginVertical: 20,
+      marginHorizontal:5,
       borderRadius: 10,
       borderColor: "lightgrey",
     },

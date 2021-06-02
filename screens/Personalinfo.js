@@ -51,7 +51,7 @@ export default function PersonalInfo({ navigation }) {
               <Text p>
                 {global.userData == undefined 
                   ? "-------"
-                  : global.userData.fullname}
+                  : global.userData.number}
               </Text>
             </View>
 
