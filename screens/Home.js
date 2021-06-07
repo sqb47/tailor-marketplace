@@ -147,7 +147,7 @@ export default function Home({ navigation }) {
             <TouchableOpacity onPress={() =>navigation.navigate('Product',item)}>
               <View style={styles.card}>
                 <Image
-                  source={require("../assets/placeholder.jpeg")}
+                  source={{uri:'data:image/jpeg;base64,' +item.image}}
                   style={styles.image}
                 />
                 <Text h5 color="grey">
@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     height: 250,
-    resizeMode: "stretch",
   },
   logo:{
     resizeMode: "stretch",

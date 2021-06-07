@@ -47,6 +47,7 @@ export default function MeasurmentForm({ navigation }) {
 
     var isEmpty=emptyFields(neck, shoulder, chest, waist, hips, sleve, length, ghera, shalwar)
     if (isEmpty){
+      alert('empty fields')
       setNeckValid(neck==""?false:true)
       setShoulderValid(shoulder==""?false:true)
       setChestValid(chest==""?false:true)
@@ -94,6 +95,7 @@ export default function MeasurmentForm({ navigation }) {
       ghera:ghera,
       salwarlength:shalwar
     }
+    console.log(data)
     await updateMeasurements(data)
 
     setButtonloading(false)

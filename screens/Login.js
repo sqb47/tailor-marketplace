@@ -30,8 +30,10 @@ export default function Login({ navigation }) {
     setLoading(true);
     setEmailValid(true);
     setPasswordValid(true);
+    var islogin=true
 
     if (emptyFields(email, password)) {
+      alert('empty fields')
       if (email == "") {
         setEmailValid(false);
       }
@@ -43,7 +45,7 @@ export default function Login({ navigation }) {
     }
     if (passwordValid && emailValid) {
       var object = {
-        email: email,
+        email: email.toLowerCase(),
         password: password,
       };
 

@@ -27,7 +27,9 @@ export default function Home({ navigation }) {
     if ( isLoggedIn ){
       return(
         <View>
-          <Text h3 color="#19ce0f">username</Text>
+          <Text h3 color="#19ce0f">{global.userData == undefined 
+                  ? "-------"
+                  : global.userData.fullname}</Text>
             
         </View>
       )

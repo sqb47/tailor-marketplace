@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { Button, Input, Text, Icon, Card } from "galio-framework";
 import { StyleSheet, View, ScrollView, Image, FlatList } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'; 
 import Toast from "react-native-toast-message";
 import Modal from "react-native-modal";
 
+FileSystem.readAsStringAsync()
 import {
   emptyFields,
   numberValidation,
   emptyField,
 } from "../validation/validation";
-import { updateproducts } from "../apis/apis";
+import { uploadproducts } from "../apis/apis";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 let data=[]
@@ -19,6 +23,32 @@ data = global.userData.products;
 }catch(e){
   console.log(e)
 }
+async function permitions() {
+  if (Platform.OS !== 'web') {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+    }
+  }
+  
+}
+
+var base64Icon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAwBQTFRF7c5J78kt+/Xm78lQ6stH5LI36bQh6rcf7sQp671G89ZZ8c9V8c5U9+u27MhJ/Pjv9txf8uCx57c937Ay5L1n58Nb67si8tVZ5sA68tJX/Pfr7dF58tBG9d5e8+Gc6chN6LM+7spN1pos6rYs6L8+47hE7cNG6bQc9uFj7sMn4rc17cMx3atG8duj+O7B686H7cAl7cEm7sRM26cq/vz5/v767NFY7tJM78Yq8s8y3agt9dte6sVD/vz15bY59Nlb8txY9+y86LpA5LxL67pE7L5H05Ai2Z4m58Vz89RI7dKr+/XY8Ms68dx/6sZE7sRCzIEN0YwZ67wi6rk27L4k9NZB4rAz7L0j5rM66bMb682a5sJG6LEm3asy3q0w3q026sqC8cxJ6bYd685U5a457cIn7MBJ8tZW7c1I7c5K7cQ18Msu/v3678tQ3aMq7tNe6chu6rgg79VN8tNH8c0w57Q83akq7dBb9Nld9d5g6cdC8dyb675F/v327NB6////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/LvB3QAAAMFJREFUeNpiqIcAbz0ogwFKm7GgCjgyZMihCLCkc0nkIAnIMVRw2UhDBGp5fcurGOyLfbhVtJwLdJkY8oscZCsFPBk5spiNaoTC4hnqk801Qi2zLQyD2NlcWWP5GepN5TOtSxg1QwrV01itpECG2kaLy3AYiCWxcRozQWyp9pNMDWePDI4QgVpbx5eo7a+mHFOqAxUQVeRhdrLjdFFQggqo5tqVeSS456UEQgWE4/RBboxyC4AKCEI9Wu9lUl8PEGAAV7NY4hyx8voAAAAASUVORK5CYII=';
+
+function getDataUrl(img) {
+  document
+  // Create canvas
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  // Set width and height
+  canvas.width = img.width;
+  canvas.height = img.height;
+  // Draw the image
+  ctx.drawImage(img, 0, 0);
+  return canvas.toDataURL(img.url);
+}
+
+
 
 
 
@@ -31,6 +61,7 @@ export default function Shop({ navigation }) {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [time, setTime] = useState("");
+  const [imageData,setaimageData]=useState("");
 
   const [nameValid, setnameValid] = useState(true);
   const [descriptionValid, setDescriptionValid] = useState(true);
@@ -38,6 +69,43 @@ export default function Shop({ navigation }) {
   const [timeValid, setTimeValid] = useState(true);
 
   const [product, setproduct] = useState(data);
+
+  const pickImage = async () => {
+    permitions()
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      width:500,
+      height:500,
+      aspect: [4, 3],
+      quality: 0.1,
+    });
+
+    console.log(result);
+
+    const compressImage = async (uri, format = SaveFormat.JPEG) => { // SaveFormat.PNG
+      const result = await manipulateAsync(
+          uri,
+          [{ resize: { width: 800, height:600 } }],
+          { compress: 0.7, format }
+      );
+      console.log('result in function',result)
+      const base64 = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' })
+      console.log(base64)
+      setaimageData(base64)
+      // return  { name: `${Date.now()}.${format}`, type: `image/${format}`, ...result };
+      // return: { name, type, width, height, uri }
+    };
+
+    console.log(compressImage(result.uri))
+    // const base64 = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' })
+    // console.log(base64)
+    
+
+    if (!result.cancelled) {
+      // setImage(result.uri);
+    }
+  };
 
   function clearValues() {
     setname("");
@@ -79,7 +147,7 @@ export default function Shop({ navigation }) {
       name: name,
       description: description,
       date: "" + date,
-      image: "#",
+      image: imageData,
       price: price,
       days: time,
     };
@@ -87,7 +155,7 @@ export default function Shop({ navigation }) {
     console.log("=======data===========\n",data);
     console.log('uploaad variable',upload)
     if (upload) {
-      await updateproducts(data);
+      await uploadproducts(data);
     }
     
 
@@ -97,161 +165,177 @@ export default function Shop({ navigation }) {
 
   try{
     return (
-    <View style={styles.containor}>
-      <View style={styles.header}>
-        <View>
-          <Text color="#19ce0f" h4>
-          {" "}
-          user name shop{" "}
-        </Text>
-        <View style={{flexDirection:"row"}}>
-        <Text p>
-          {" "}
-          Average reviews:{" "}
-        </Text>
-          <Icon name="star" family="Entypo" color='yellow' size={22} />
-        </View>
-        
-        </View>
-        
-        <View style={styles.rowAlign}>
-          <Button
-            onlyIcon
-            icon="reload1"
-            iconFamily="AntDesign"
-            iconSize={20}
-            color="success"
-            iconColor="#fff"
-            style={{ width: 40, height: 40 }}
-            onPress={() => setproduct(global.userData.products)}
-          />
-
-          <Button
-            onlyIcon
-            icon="plus"
-            iconFamily="Entypo"
-            iconSize={30}
-            color="success"
-            iconColor="#fff"
-            style={{ width: 40, height: 40 }}
-            onPress={() => {
-              clearValues();
-              setModalVisible(true);
-            }}
-          />
-        </View>
-      </View>
-      <View style={styles.body}>
-        <FlatList
-          style={styles.products}
-          data={product}
-          keyExtractor={(e) => e._id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-            onPress={() =>navigation.navigate('Product',item)}>
-              <View style={styles.card}>
-              <Image source={require("../assets/placeholder.jpeg")} style={styles.image} />
-              <Text h5 color="grey">
-                {item.name}
-              </Text>
-              <Text p color="grey">
-                {item.description}
-              </Text>
-              <View style={styles.cardFooter}>
-                <Text p color="#19ce0f">
-                  Rs: {item.price}
-                </Text>
-                <Text p color="#19ce0f">
-                  Days to complete: {item.days}
-                </Text>
-              </View>
-            </View>
-            </TouchableOpacity>
-            
-          )}
-        />
-      </View>
-      <Modal
-        transparent={true}
-        isVisible={modalVisible}
-        avoidKeyboard
-        onBackdropPress={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modal}>
-          <View style={styles.header}>
+      <View style={styles.containor}>
+        <View style={styles.header}>
+          <View>
             <Text color="#19ce0f" h4>
               {" "}
-              Add New Product{" "}
+              user name shop{" "}
             </Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text p> Average reviews: </Text>
+              <Icon name="star" family="Entypo" color="yellow" size={22} />
+            </View>
+          </View>
+
+          <View style={styles.rowAlign}>
             <Button
               onlyIcon
-              icon="close"
-              iconFamily="FontAwesome"
+              icon="reload1"
+              iconFamily="AntDesign"
               iconSize={20}
-              color="red"
+              color="success"
               iconColor="#fff"
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
+              style={{ width: 40, height: 40 }}
+              onPress={() => setproduct(global.userData.products)}
+            />
+
+            <Button
+              onlyIcon
+              icon="plus"
+              iconFamily="Entypo"
+              iconSize={30}
+              color="success"
+              iconColor="#fff"
+              style={{ width: 40, height: 40 }}
+              onPress={() => {
+                clearValues();
+                setModalVisible(true);
+              }}
             />
           </View>
-          <KeyboardAwareScrollView>
-            <View style={styles.modalBody}>
-              <Input
-                style={nameValid ? styles.valid : styles.invalid}
-                rounded
-                placeholder="Enter Product Name"
-                placeholderTextColor="#928988"
-                label="Name"
-                onChangeText={(text) => setname(text)}
-              />
-
-              <Input
-                style={descriptionValid ? styles.valid : styles.invalid}
-                rounded
-                placeholder="Enter Product Description"
-                placeholderTextColor="#928988"
-                label="Description"
-                onChangeText={(text) => setDescription(text)}
-              />
-
-              <Input
-                type="numeric"
-                style={priceValid ? styles.valid : styles.invalid}
-                rounded
-                placeholder="Enter Product Price"
-                placeholderTextColor="#928988"
-                label="Price"
-                onChangeText={(text) => setPrice(text)}
-              />
-
-              <Input
-                type="numeric"
-                style={timeValid ? styles.valid : styles.invalid}
-                rounded
-                placeholder="Enter days to complete Task"
-                placeholderTextColor="#928988"
-                label="Days"
-                onChangeText={(text) => setTime(text)}
-              />
-
-              <Button
-                round
-                uppercase
-                color="success"
-                style={styles.button}
-                loading={loading}
-                onPress={() => upload()}
-              >
-                Upload
-              </Button>
-            </View>
-          </KeyboardAwareScrollView>
         </View>
-      </Modal>
-    </View>
-  );
+        <View style={styles.body}>
+          <FlatList
+            style={styles.products}
+            data={product}
+            keyExtractor={(e) => e._id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Product", item)}
+              >
+                <View style={styles.card}>
+                  <Image
+                    source={{uri:'data:image/jpeg;base64,' +item.image}}
+                    style={styles.image}
+                  />
+                  <Text h5 color="grey">
+                    {item.name}
+                  </Text>
+                  <Text p color="grey">
+                    {item.description}
+                  </Text>
+                  <View style={styles.cardFooter}>
+                    <Text p color="#19ce0f">
+                      Rs: {item.price}
+                    </Text>
+                    <Text p color="#19ce0f">
+                      Days to complete: {item.days}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+        <Modal
+          transparent={true}
+          isVisible={modalVisible}
+          avoidKeyboard
+          onBackdropPress={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.modal}>
+            <View style={styles.header}>
+              <Text color="#19ce0f" h4>
+                {" "}
+                Add New Product{" "}
+              </Text>
+              <Button
+                onlyIcon
+                icon="close"
+                iconFamily="FontAwesome"
+                iconSize={20}
+                color="red"
+                iconColor="#fff"
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              />
+            </View>
+            <KeyboardAwareScrollView>
+              <View style={styles.modalBody}>
+                <Input
+                  style={nameValid ? styles.valid : styles.invalid}
+                  rounded
+                  placeholder="Enter Product Name"
+                  placeholderTextColor="#928988"
+                  label="Name"
+                  onChangeText={(text) => setname(text)}
+                />
+
+                <Input
+                  style={descriptionValid ? styles.valid : styles.invalid}
+                  rounded
+                  placeholder="Enter Product Description"
+                  placeholderTextColor="#928988"
+                  label="Description"
+                  onChangeText={(text) => setDescription(text)}
+                />
+
+                <Input
+                  type="numeric"
+                  style={priceValid ? styles.valid : styles.invalid}
+                  rounded
+                  placeholder="Enter Product Price"
+                  placeholderTextColor="#928988"
+                  label="Price"
+                  onChangeText={(text) => setPrice(text)}
+                />
+
+                <Input
+                  type="numeric"
+                  style={timeValid ? styles.valid : styles.invalid}
+                  rounded
+                  placeholder="Enter days to complete Task"
+                  placeholderTextColor="#928988"
+                  label="Days"
+                  onChangeText={(text) => setTime(text)}
+                />
+
+                <Button
+                  round
+                  uppercase
+                  color="warning"
+                  style={styles.button}
+                  onPress={pickImage}
+                >
+                  pick image
+                </Button>
+
+                {/* {image && (
+                  <Image
+                    source={{ uri: image }}
+                    style={{ width: 200, height: 200 }}
+                  />
+                )} */}
+
+                <Button
+                  round
+                  uppercase
+                  color="success"
+                  style={styles.button}
+                  loading={loading}
+                  onPress={() => upload()}
+                >
+                  Upload
+                </Button>
+              </View>
+            </KeyboardAwareScrollView>
+          </View>
+        </Modal>
+      </View>
+    );
   }catch(e){
     console.log(e)
     return(

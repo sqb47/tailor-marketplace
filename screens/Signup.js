@@ -12,6 +12,7 @@ import {
   nameValidation,
 } from "../validation/validation";
 import { signup } from "../apis/apis";
+import { Alert } from "react-native";
 
 var emailValidationMessage = "Please Enter Valid E-Mail";
 var phoneValidationMessage = "Please Enter Valid Phone Number";
@@ -50,24 +51,35 @@ export default function Signup({ navigation }) {
     setEmailValid(true);
     setPasswordValid(true);
     setConfirmPasswordValidation(true);
+    var upload=true
 
     if (emptyFields(email, phone, password, confirmPassword, name)) {
+      alert('akdjlkd')
       if (email == "") {
         setEmailValid(false);
+        upload=false
       }
       if (name == "") {
         setnameValidation(false);
+        upload=false
       }
       if (password == "") {
         setPasswordValid(false);
+        upload=false
       }
       if (confirmPassword == "") {
         setConfirmPasswordValidation(false);
+        upload=false
       }
       if (phone == "") {
         setPhoneValid(false);
+        upload=false
       }
     } else {
+      if (!emailValidation(email)){
+        upload=false
+        alert('invalid email')
+      }
       setEmailValid(emailValidation(email));
 
       if (!passwordValidation(password, confirmPassword)) {
@@ -75,26 +87,36 @@ export default function Signup({ navigation }) {
         alert(validMessage);
         setPasswordValid(false);
         setConfirmPasswordValidation(false);
+        upload=false
+        alert('password donot match')
       }
+      if (!phoneValidation(phone)){
+        upload=false
+        alert('invalid name (only use alphabets)')
+      }
+      if (!nameValidation(name)){
+        upload=false
+        alert('invalid phone number (only use numbers)')
+      }
+      // upload = phoneValidation(phone)
+      // upload = nameValidation(name)
 
       setPhoneValid(phoneValidation(phone));
       setnameValidation(nameValidation(name));
     }
-    if (
-      emailValid &&
-      passwordValid &&
-      nameValid &&
-      phoneValid &&
-      confirmPasswordValid
-    ) {
+    if (upload) {
       var object = {
         fullname: name,
-        email: email,
+        email: email.toLowerCase(),
         number: phone,
         password: password,
         accounttype: accountType,
       };
       await signup(object);
+      if (global.signup._id == undefined){
+        alert('email already regitered')
+        return
+      }
 
       Toast.show({
         type: 'success',
@@ -105,18 +127,19 @@ export default function Signup({ navigation }) {
         autoHide: true,
         bottomOffset: 40,
       });
+      navigation.navigate("Login")
     }
     setLoading(false);
-    Toast.show({
-      type: 'success',
-      position: 'bottom',
-      text1: 'success',
-      text2: 'Account registered successfully',
-      visibilityTime: 2000,
-      autoHide: true,
-      bottomOffset: 10,
-    }); 
-    //navigation.navigate("Login")
+    // Toast.show({
+    //   type: 'success',
+    //   position: 'bottom',
+    //   text1: 'success',
+    //   text2: 'Account registered successfully',
+    //   visibilityTime: 2000,
+    //   autoHide: true,
+    //   bottomOffset: 10,
+    // }); 
+    
   }
 
   return (

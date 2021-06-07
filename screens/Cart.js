@@ -48,7 +48,7 @@ export default function Cart({ navigation }) {
           renderItem={({ item }) => (
             <View style={styles.card}>
               <Image
-                source={require("../assets/placeholder.jpeg")}
+                source={{uri:'data:image/jpeg;base64,' +item.image}}
                 style={styles.image}
               />
               <Text h5 color="grey">

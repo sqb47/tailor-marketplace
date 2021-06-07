@@ -42,6 +42,7 @@ export async function signup(object) {
   })
     .then((response) => response.json())
     .then((data) => {
+      global.signup=data
       console.log(data);
     })
     .catch((error) => {
@@ -52,6 +53,7 @@ export async function signup(object) {
 
 export async function updateMeasurements(object) {
   console.log("update measurement");
+  console.log(object)
 
   await fetch("https://tailor-marketplace-apis.herokuapp.com/measurement", {
     method: "PUT",
@@ -73,11 +75,33 @@ export async function updateMeasurements(object) {
 }
 
 
-export async function updateproducts(object) {
+export async function uploadproducts(object) {
   console.log("update productts");
 
   await fetch("https://tailor-marketplace-apis.herokuapp.com/products", {
-    method: "PUT",
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      global.userData=data
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+}
+
+export async function deleteproducts(object) {
+  console.log("delete productts");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/products", {
+    method: "DELETE",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
