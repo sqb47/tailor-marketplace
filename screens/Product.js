@@ -208,15 +208,29 @@ export default function Product({ navigation, route }) {
 
       <FlatList
         horizontal
-        data={people}
+        data={global.products}
         renderItem={({ item }) => (
-          <View style={{width:150, height:150, borderWidth:2}}>
-            <Text>{item.name}</Text>
-          <Text>{item.name}</Text>
+          <View style={{width:200, height:220}}>
+            <TouchableOpacity onPress={() =>navigation.navigate('Product',item)}>
+              <View style={styles.card}>
+                <Image
+                  source={{uri:'data:image/jpeg;base64,' +item.image}}
+                  style={styles.image}
+                />
+                <Text h5 color="grey">
+                  {item.name}
+                </Text>
+                <View style={styles.cardFooter}>
+                  <Text p color="#19ce0f">
+                    Rs: {item.price}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
           
         )}
-        showsHorizontalScrollIndicator={true}
+        showsHorizontalScrollIndicator={false}
       />
 
       <Toast ref={(ref) => Toast.setRef(ref)} />
@@ -244,17 +258,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   card: {
-    marginVertical: 20,
     marginHorizontal: 5,
     borderRadius: 10,
+    borderWidth:1,
     borderColor: "lightgrey",
   },
   image: {
     width: "100%",
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    height: 250,
-    resizeMode: "stretch",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    height: 141,
+    resizeMode: 'contain',
   },
   cardFooter: {
     flexDirection: "row",
