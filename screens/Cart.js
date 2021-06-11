@@ -16,28 +16,52 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { placeOrder } from '../apis/apis'
 
 export default function Cart({ navigation }) {
   function empty(params) {
-    setData([])
-    global.cart=[]
+    setData([]);
+    global.cart = [];
+  }
+  async function checkout(){
+    for (var product in global.cart)
+    {
+      console.log('-----', product._id)
+    }
+    // var date = new Date();
+    // var data={
+    //   id:global.userData._id,
+    //   date:''+date,
+    //   email:global.userData.email,
+    //   productid:item._id,
+    //   status:'pending',
+    //   tid:item.tid,
+    //   tname:item.tname,
+    //   temail:item.temail,
+    //   productname:item.name,
+    // }
+    // await placeOrder(data)
   }
   const [data, setData] = useState([]);
+  const [refresh,setrefresh]=useState('')
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       setData(global.cart);
       console.log("cart", global.cart);
       console.log("cart", data);
-      console.log("length", data.length);
+      console.log("length", global.cart.length);
       // The screen is focused
       // Call any action and update data
+      setTimeout(function(){ console.log('---') }, 1000);
+      navigation.navigate('Cart')
+      setrefresh('0')
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
-  return data.length != 0 ? (
+  return global.cart.length !=0 ? (
     <View>
       <View style={styles.header}></View>
       <View style={styles.body}>
@@ -48,7 +72,7 @@ export default function Cart({ navigation }) {
           renderItem={({ item }) => (
             <View style={styles.card}>
               <Image
-                source={{uri:'data:image/jpeg;base64,' +item.image}}
+                source={{ uri: "data:image/jpeg;base64," + item.image }}
                 style={styles.image}
               />
               <Text h5 color="grey">
@@ -68,12 +92,25 @@ export default function Cart({ navigation }) {
             </View>
           )}
         />
-        <Button round color='success' style={styles.button}
-        onPress={() => empty()}>
-        Empty Cart
-      </Button>
+        <View style={styles.rowAlign}>
+          <Button
+            round
+            color="warning"
+            style={styles.button}
+            onPress={() => empty()}
+          >
+            Empty Cart
+          </Button>
 
-      
+          <Button
+            round
+            color="success"
+            style={styles.button}
+            onPress={() => checkout()}
+          >
+            Checkout
+          </Button>
+        </View>
       </View>
     </View>
   ) : (
@@ -155,7 +192,6 @@ const styles = StyleSheet.create({
   products: {
     height: "75%",
     width: "100%",
-
   },
   modal: {
     alignSelf: "center",
@@ -175,9 +211,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    width: 270,
+    width: 155,
     marginVertical: 30,
-    alignSelf:'center'
+    alignSelf: "center",
   },
   valid: {
     borderColor: "black",

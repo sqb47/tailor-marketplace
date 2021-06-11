@@ -14,7 +14,7 @@ import {
   numberValidation,
   emptyField,
 } from "../validation/validation";
-import { uploadproducts } from "../apis/apis";
+import { uploadproducts, updateproduct, deleteproducts } from "../apis/apis";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 let data=[]
@@ -211,7 +211,8 @@ export default function Shop({ navigation }) {
             data={product}
             keyExtractor={(e) => e._id}
             renderItem={({ item }) => (
-              <TouchableOpacity
+              <View>
+                <TouchableOpacity
                 onPress={() => navigation.navigate("Product", item)}
               >
                 <View style={styles.card}>
@@ -235,6 +236,40 @@ export default function Shop({ navigation }) {
                   </View>
                 </View>
               </TouchableOpacity>
+
+          <View style={styles.options}>
+            <Button
+            onlyIcon
+            icon="edit"
+            iconFamily="AntDesign"
+            iconSize={25}
+            iconColor="white"
+            style={{ width: 50, height: 50 }}
+            round
+            color='warning'
+            onPress={() => {
+              clearValues();
+              setModalVisible(true);
+            }}/>
+
+            <Button
+            onlyIcon
+            icon="delete"
+            iconFamily="AntDesign"
+            iconSize={25}
+            iconColor="white"
+            style={{ width: 50, height: 50 }}
+            round
+            color='red'
+            onPress={() => {
+              deleteproducts({
+                id:global.userData._id,
+                productId:item._id
+              })
+            }}/>
+          </View>
+              </View>
+              
             )}
           />
         </View>
@@ -423,5 +458,14 @@ const styles = StyleSheet.create({
   },
   invalid: {
     borderColor: "red",
+  },
+  options: {
+    width: "100%",
+    height: 70,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent:'flex-end',
+    borderBottomWidth:1,
+    borderColor:'grey',
   },
 });

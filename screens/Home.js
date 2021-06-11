@@ -84,7 +84,7 @@ export default function Home({ navigation }) {
       console.log('hello===========\n',error);
       navigation.navigate("Account")
     }
-    setData(products);
+    setData(products.reverse());
     
     setLoading(false)
   }

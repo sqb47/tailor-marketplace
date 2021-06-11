@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-community/async-storage";
 
+//------------------------- login ----------------------------------------
 export async function login(object) {
   var userData;
   await fetch("https://tailor-marketplace-apis.herokuapp.com/login", {
@@ -28,7 +29,9 @@ export async function login(object) {
     console.log(err);
   }console.log(global.userData) 
 }
+//-----------------------------------------------------------------
 
+//---------------------------- signup -------------------------------------
 export async function signup(object) {
   console.log("signup working");
 
@@ -50,7 +53,9 @@ export async function signup(object) {
       console.error(error);
     });
 }
+//-----------------------------------------------------------------
 
+//--------------------------- update measurement --------------------------------------
 export async function updateMeasurements(object) {
   console.log("update measurement");
   console.log(object)
@@ -73,8 +78,9 @@ export async function updateMeasurements(object) {
       console.error(error);
     });
 }
+//-----------------------------------------------------------------
 
-
+//--------------------------- upload product  --------------------------------------
 export async function uploadproducts(object) {
   console.log("update productts");
 
@@ -96,7 +102,33 @@ export async function uploadproducts(object) {
       console.error(error);
     });
 }
+//-----------------------------------------------------------------
 
+//--------------------------- update product  --------------------------------------
+export async function updateproduct(object) {
+  console.log("update productts");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/products", {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      global.userData=data
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+}
+//-----------------------------------------------------------------
+
+//----------------------------delete product -------------------------------------
 export async function deleteproducts(object) {
   console.log("delete productts");
 
@@ -118,7 +150,9 @@ export async function deleteproducts(object) {
       console.error(error);
     });
 }
+//-----------------------------------------------------------------
 
+//------------------------get all tailor-----------------------------------------
 export async function getTailors() {
   var tailors
   console.log("get tailors");
@@ -141,7 +175,9 @@ export async function getTailors() {
     });
     return tailors
 }
+//-----------------------------------------------------------------
 
+//------------------------- get user ----------------------------------------
 export async function getUser(object) {
   var userData;
   console.log("getUser working");
@@ -166,3 +202,31 @@ export async function getUser(object) {
     console.log('responce from apisssss++++++++++++++++',userData);
     global.userData=userData
 }
+//-----------------------------------------------------------------
+
+//--------------------------- place order --------------------------------------
+export async function placeOrder(object) {
+  var userData;
+  console.log("place order");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/order", {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      userData=data
+      console.log('responce from apisssss============',data);
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+    console.log('responce from apisssss++++++++++++++++',userData);
+    global.userData=userData
+}
+//-----------------------------------------------------------------
