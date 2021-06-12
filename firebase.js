@@ -12,7 +12,10 @@ var firebaseConfig = {
 // Initialize Firebase
 
 
-export async function uploadImage(uri, imgname){
+export async function uploadImage(uri){
+    var d = new Date();
+    var name = d.getTime();
+
     if (!firebase.apps.length){
         firebase.initializeApp(firebaseConfig);
         console.log('firebase apps',firebase.apps)
@@ -21,12 +24,12 @@ export async function uploadImage(uri, imgname){
     const responce = await fetch(uri)
     const blob = await responce.blob()
 
-    var ref = firebase.storage().ref().child("images/"+imgname)
+    var ref = firebase.storage().ref().child("images/"+name)
     ref.put(blob)
     .then(async ( responce ) => {
         // console.log('responce of image upload:',responce)
         console.log('success')
-        let downloadUrl = await firebase.storage().ref("images/"+imgname).getDownloadURL();
+        let downloadUrl = await firebase.storage().ref("images/"+name).getDownloadURL();
         console.log('downloadUrl :', downloadUrl); // do whatever you need with it
     })
     .catch((err) => {
@@ -37,3 +40,6 @@ export async function uploadImage(uri, imgname){
 
 
 // https://firebasestorage.googleapis.com/v0/b/tailor-041.appspot.com/o/images%2Ftest-name?alt=media&token=148459c8-c169-4695-86ae-0003b215c9e4
+
+// var d = new Date();
+//   var n = d.getTime();
