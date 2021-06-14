@@ -220,7 +220,34 @@ export async function placeOrder(object) {
     .then((response) => response.json())
     .then((data) => {
       userData=data
-      console.log('responce from apisssss============',data);
+      console.log('responce from order============\n',data);
+    })
+    .catch((error) => {
+      alert("something went wrong");
+      console.error(error);
+    });
+    console.log('responce from apisssss++++++++++++++++',userData);
+    global.userData=userData
+}
+//-----------------------------------------------------------------
+
+//--------------------------- order status update --------------------------------------
+export async function updateOrderStatus(object) {
+  var userData;
+  console.log("update status");
+
+  await fetch("https://tailor-marketplace-apis.herokuapp.com/orderstatus", {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      userData=data
+      console.log('responce from update order status============\n',data);
     })
     .catch((error) => {
       alert("something went wrong");

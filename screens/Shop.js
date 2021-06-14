@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { Button, Input, Text, Icon, Card } from "galio-framework";
 import { StyleSheet, View, ScrollView, Image, FlatList } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
-import * as ImagePicker from 'expo-image-picker'
-import * as FileSystem from 'expo-file-system'
-import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'; 
-import { uploadImage } from '../firebase'
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { uploadImage } from "../firebase";
 import Toast from "react-native-toast-message";
 import Modal from "react-native-modal";
 
-FileSystem.readAsStringAsync()
+var imageuri = "";
+
+FileSystem.readAsStringAsync();
 import {
   emptyFields,
   numberValidation,
@@ -18,50 +20,33 @@ import {
 import { uploadproducts, updateproduct, deleteproducts } from "../apis/apis";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-let data=[]
-try{
-data = global.userData.products;
-}catch(e){
-  console.log(e)
+let data = [];
+try {
+  data = global.userData.products;
+} catch (e) {
+  console.log(e);
 }
 async function permitions() {
-  if (Platform.OS !== 'web') {
+  if (Platform.OS !== "web") {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
     }
   }
-  
 }
-
-
-function getDataUrl(img) {
-  document
-  // Create canvas
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  // Set width and height
-  canvas.width = img.width;
-  canvas.height = img.height;
-  // Draw the image
-  ctx.drawImage(img, 0, 0);
-  return canvas.toDataURL(img.url);
-}
-
-
-
-
 
 export default function Shop({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
+  const [deleteloading, setdeleteloading] = useState(false);
+
   const [name, setname] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [time, setTime] = useState("");
-  const [imageData,setaimageData]=useState("");
+  const [image, setimage] = useState("");
 
   const [nameValid, setnameValid] = useState(true);
   const [descriptionValid, setDescriptionValid] = useState(true);
@@ -71,14 +56,12 @@ export default function Shop({ navigation }) {
   const [product, setproduct] = useState(data);
 
   const pickImage = async () => {
-    permitions()
+    permitions();
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
     });
-
-
 
     // const compressImage = async (uri, format = SaveFormat.JPEG) => { // SaveFormat.PNG
     //   const result = await manipulateAsync(
@@ -97,11 +80,13 @@ export default function Shop({ navigation }) {
     // console.log(compressImage(result.uri))
     // const base64 = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' })
     // console.log(base64)
-    
 
     if (!result.cancelled) {
-      console.log(result)
-      await uploadImage(result.uri,'test-name')
+      console.log(result);
+      imageuri = result.uri;
+      // await uploadImage(imageuri)
+      // console.log(uri)
+
       // setImage(result.uri);
     }
   };
@@ -121,55 +106,56 @@ export default function Shop({ navigation }) {
   }
 
   async function upload() {
-    console.log("---------")
+    console.log("---------");
     setLoading(true);
-    resetValidation()
-    var upload=false
-    
+    resetValidation();
+    var upload = false;
 
-    console.log("before:",nameValid , descriptionValid , priceValid , timeValid)
-    console.log("values:",name, description, price, time)
+    console.log("before:", nameValid, descriptionValid, priceValid, timeValid);
+    console.log("values:", name, description, price, time);
     if (emptyFields(name, description, price, time)) {
       setnameValid(emptyField(name));
       setDescriptionValid(emptyField(description));
       setPriceValid(emptyField(price));
       setTimeValid(emptyField(time));
     } else {
-      upload=numberValidation(price) && numberValidation(time)
+      upload = numberValidation(price) && numberValidation(time);
       setPriceValid(numberValidation(price));
       setTimeValid(numberValidation(time));
     }
     var date = new Date();
 
-    var data = {
-      id: global.userData._id,
-      name: name,
-      description: description,
-      date: "" + date,
-      image: imageData,
-      price: price,
-      days: time,
-    };
-
-    console.log("=======data===========\n",data);
-    console.log('uploaad variable',upload)
+    console.log("uploaad variable", upload);
     if (upload) {
-      await uploadproducts(data);
-    }
-    
+      var data = {
+        id: global.userData._id,
+        tname:global.userData.fullname,
+        temail:global.userData.email,
+        name: name,
+        description: description,
+        date: "" + date,
+        image: "",
+        price: price,
+        days: time,
+      };
+      console.log(data)
+      await uploadImage(imageuri, data);
 
-    
+      // console.log("=======data===========\n",data);
+      // await uploadproducts(data);
+    }
+
     setLoading(false);
   }
 
-  try{
+  try {
     return (
       <View style={styles.containor}>
         <View style={styles.header}>
           <View>
             <Text color="#19ce0f" h4>
               {" "}
-              user name shop{" "}
+              Shop{" "}
             </Text>
             <View style={{ flexDirection: "row" }}>
               <Text p> Average reviews: </Text>
@@ -211,33 +197,26 @@ export default function Shop({ navigation }) {
             keyExtractor={(e) => e._id}
             renderItem={({ item }) => (
               <View>
-                <TouchableOpacity
-                onPress={() => navigation.navigate("Product", item)}
-              >
-                <View style={styles.card}>
-                  <Image
-                    source={{uri:'data:image/jpeg;base64,' +item.image}}
-                    style={styles.image}
-                  />
-                  <Text h5 color="grey">
-                    {item.name}
-                  </Text>
-                  <Text p color="grey">
-                    {item.description}
-                  </Text>
-                  <View style={styles.cardFooter}>
-                    <Text p color="#19ce0f">
-                      Rs: {item.price}
+                  <View style={styles.card}>
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                    <Text h5 color="grey">
+                      {item.name}
                     </Text>
-                    <Text p color="#19ce0f">
-                      Days to complete: {item.days}
+                    <Text p color="grey">
+                      {item.description}
                     </Text>
+                    <View style={styles.cardFooter}>
+                      <Text p color="#19ce0f">
+                        Rs: {item.price}
+                      </Text>
+                      <Text p color="#19ce0f">
+                        Days to complete: {item.days}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
 
-          <View style={styles.options}>
-            <Button
+                <View style={styles.options}>
+                  {/* <Button
             onlyIcon
             icon="edit"
             iconFamily="AntDesign"
@@ -249,26 +228,29 @@ export default function Shop({ navigation }) {
             onPress={() => {
               clearValues();
               setModalVisible(true);
-            }}/>
+            }}/> */}
 
-            <Button
-            onlyIcon
-            icon="delete"
-            iconFamily="AntDesign"
-            iconSize={25}
-            iconColor="white"
-            style={{ width: 50, height: 50 }}
-            round
-            color='red'
-            onPress={() => {
-              deleteproducts({
-                id:global.userData._id,
-                productId:item._id
-              })
-            }}/>
-          </View>
+                  <Button
+                    onlyIcon
+                    loading={deleteloading}
+                    icon="delete"
+                    iconFamily="AntDesign"
+                    iconSize={25}
+                    iconColor="white"
+                    style={{ width: 50, height: 50 }}
+                    round
+                    color="red"
+                    onPress={async () => {
+                      setdeleteloading(true);
+                      await deleteproducts({
+                        id: global.userData._id,
+                        productId: item._id,
+                      });
+                      setdeleteloading(false);
+                    }}
+                  />
+                </View>
               </View>
-              
             )}
           />
         </View>
@@ -341,7 +323,7 @@ export default function Shop({ navigation }) {
                   round
                   uppercase
                   color="warning"
-                  style={styles.button}
+                  style={styles.buttonImage}
                   onPress={pickImage}
                 >
                   pick image
@@ -370,19 +352,14 @@ export default function Shop({ navigation }) {
         </Modal>
       </View>
     );
-  }catch(e){
-    console.log(e)
-    return(
+  } catch (e) {
+    console.log(e);
+    return (
       <View>
-        <Text>
-          please login
-        </Text>
-        
+        <Text>please login</Text>
       </View>
-    )
+    );
   }
-
-  
 }
 
 const styles = StyleSheet.create({
@@ -452,6 +429,10 @@ const styles = StyleSheet.create({
     width: 270,
     marginVertical: 30,
   },
+  buttonImage: {
+    width: 270,
+    marginTop: 30,
+  },
   valid: {
     borderColor: "black",
   },
@@ -463,8 +444,8 @@ const styles = StyleSheet.create({
     height: 70,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:'flex-end',
-    borderBottomWidth:1,
-    borderColor:'grey',
+    justifyContent: "flex-end",
+    borderBottomWidth: 1,
+    borderColor: "grey",
   },
 });

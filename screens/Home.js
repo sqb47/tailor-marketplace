@@ -151,7 +151,7 @@ export default function Home({ navigation }) {
             <TouchableOpacity onPress={() =>navigation.navigate('Product',item)}>
               <View style={styles.card}>
                 <Image
-                  source={{uri:'data:image/jpeg;base64,' +item.image}}
+                  source={{uri:item.image}}
                   style={styles.image}
                 />
                 <Text h5 color="grey">

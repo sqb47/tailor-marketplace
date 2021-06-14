@@ -91,7 +91,7 @@ export default function Home({ navigation }) {
               <Text style={styles.options}>Shop {/*cart*/}</Text> 
             </TouchableOpacity>
 
-            <TouchableOpacity >
+            <TouchableOpacity onPress={() => navigation.navigate("Orders")}>
               <Text style={styles.options}>Orders</Text>
             </TouchableOpacity>
             

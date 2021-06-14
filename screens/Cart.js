@@ -16,34 +16,50 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { placeOrder } from '../apis/apis'
+import { placeOrder } from "../apis/apis";
 
 export default function Cart({ navigation }) {
+  
+  
+  const [data, setData] = useState([]);
+  const [refresh, setrefresh] = useState("");
+  const [loading, setloading] = useState(false);
+
+  async function checkout() {
+    setloading(true)
+    for (var i=0;i<global.cart.length;i++) {
+      console.log("-----", global.cart[i]);
+      var date = new Date();
+      var data={
+        id:global.userData._id,
+        date:''+date,
+        email:global.userData.email,
+        productid:global.cart[i]._id,
+        status:'pending',
+        tid:global.cart[i].tid,
+        tname:global.cart[i].tname,
+        temail:global.cart[i].temail,
+        productname:global.cart[i].name,
+      }
+      await placeOrder(data)
+      console.log(data)
+      console.log('order placed')
+    }
+    
+    setData([]);
+    global.cart = [];
+    alert('order placed')
+    setloading(false)
+  }
+
   function empty(params) {
     setData([]);
     global.cart = [];
   }
-  async function checkout(){
-    for (var product in global.cart)
-    {
-      console.log('-----', product._id)
-    }
-    // var date = new Date();
-    // var data={
-    //   id:global.userData._id,
-    //   date:''+date,
-    //   email:global.userData.email,
-    //   productid:item._id,
-    //   status:'pending',
-    //   tid:item.tid,
-    //   tname:item.tname,
-    //   temail:item.temail,
-    //   productname:item.name,
-    // }
-    // await placeOrder(data)
+  function reload(params) {
+    console.log('jdhfejskgfsigh')
+    setrefresh('');
   }
-  const [data, setData] = useState([]);
-  const [refresh,setrefresh]=useState('')
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       setData(global.cart);
@@ -52,18 +68,33 @@ export default function Cart({ navigation }) {
       console.log("length", global.cart.length);
       // The screen is focused
       // Call any action and update data
-      setTimeout(function(){ console.log('---') }, 1000);
-      navigation.navigate('Cart')
-      setrefresh('0')
+      setTimeout(function () {
+        console.log("---");
+      }, 1000);
+      navigation.navigate("Cart");
+      setrefresh("0");
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
 
-  return global.cart.length !=0 ? (
+  function Cartview() {
+    console.log('data.length::',data.length)
+    return data.length != 0 ? (
     <View>
-      <View style={styles.header}></View>
+      <View style={styles.header}>
+      <Button
+          onlyIcon
+          icon="reload1"
+          iconFamily="AntDesign"
+          iconSize={20}
+          color="success"
+          iconColor="#fff"
+          style={{ width: 40, height: 40 }}
+          onPress={() => reload()}
+        />
+      </View>
       <View style={styles.body}>
         <FlatList
           style={styles.products}
@@ -72,7 +103,7 @@ export default function Cart({ navigation }) {
           renderItem={({ item }) => (
             <View style={styles.card}>
               <Image
-                source={{ uri: "data:image/jpeg;base64," + item.image }}
+                source={{ uri:item.image }}
                 style={styles.image}
               />
               <Text h5 color="grey">
@@ -104,6 +135,7 @@ export default function Cart({ navigation }) {
 
           <Button
             round
+            loading = {loading}
             color="success"
             style={styles.button}
             onPress={() => checkout()}
@@ -114,25 +146,46 @@ export default function Cart({ navigation }) {
       </View>
     </View>
   ) : (
-    <View style={styles.container}>
-      <Icon
-        style={styles.icon}
-        name="shopping-cart"
-        family="Feather"
-        color="red"
-        size={75}
-      />
-      <Text style={styles.text}>Cart is empty</Text>
+    <View>
+      <View style={styles.header}>
+        <Button
+          onlyIcon
+          icon="reload1"
+          iconFamily="AntDesign"
+          iconSize={20}
+          color="success"
+          iconColor="#fff"
+          style={{ width: 40, height: 40 }}
+          onPress={() => reload()}
+        />
+      </View>
+      <View style={styles.container}>
+        <Icon
+          style={styles.icon}
+          name="shopping-cart"
+          family="Feather"
+          color="red"
+          size={75}
+        />
+        <Text style={styles.text}>Cart is empty</Text>
+      </View>
     </View>
   );
+  }
+
+  return(
+    <View>
+      <Cartview></Cartview>
+    </View>
+  )
+
+  
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 300,
-    paddingLeft: 25,
+    paddingTop: 200,
+    paddingLeft: 35,
   },
   input: {},
   text: {
@@ -154,11 +207,11 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    height: 70,
+    height: 80,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
-    elevation: 1,
+    marginTop: 15,
   },
   rowAlign: {
     flexDirection: "row",
@@ -166,6 +219,7 @@ const styles = StyleSheet.create({
   body: {
     width: "100%",
     paddingHorizontal: 10,
+    height:580,
   },
   card: {
     borderWidth: 1,

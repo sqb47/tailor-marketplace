@@ -1,4 +1,5 @@
 import * as firebase from "firebase";
+import { uploadproducts } from './apis/apis'
 
 var firebaseConfig = {
   apiKey: "AIzaSyCc9M5LozdTXgAI0zUaS9NpjHYMoeF-geo",
@@ -12,9 +13,13 @@ var firebaseConfig = {
 // Initialize Firebase
 
 
-export async function uploadImage(uri){
+
+export async function uploadImage(uri, data){
+    global.imageurl=''
+    var url
     var d = new Date();
     var name = d.getTime();
+    console.log('name of the file',name)
 
     if (!firebase.apps.length){
         firebase.initializeApp(firebaseConfig);
@@ -30,11 +35,19 @@ export async function uploadImage(uri){
         // console.log('responce of image upload:',responce)
         console.log('success')
         let downloadUrl = await firebase.storage().ref("images/"+name).getDownloadURL();
-        console.log('downloadUrl :', downloadUrl); // do whatever you need with it
+        // url= downloadUrl
+        console.log('global image url:',downloadUrl)
+        data.image = downloadUrl
+        console.log(data)
+        await uploadproducts(data);
+        alert('product uploaded')
+
     })
     .catch((err) => {
         console.log('image upload error:',err)
     })
+
+    // return url
 
 }
 

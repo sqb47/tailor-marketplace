@@ -178,10 +178,10 @@ export default function Product({ navigation, route }) {
   }
 
   var imgs = [
-    { uri: "data:image/jpeg;base64," + product.image },
-    { uri: "data:image/jpeg;base64," + product.image },
-    { uri: "data:image/jpeg;base64," + product.image },
-    { uri: "data:image/jpeg;base64," + product.image },
+    { uri: product.image },
+    { uri: product.image },
+    { uri: product.image },
+    { uri: product.image },
   ];
   return (
     <View style={styles.container}>
@@ -214,7 +214,7 @@ export default function Product({ navigation, route }) {
             <TouchableOpacity onPress={() =>navigation.navigate('Product',item)}>
               <View style={styles.card}>
                 <Image
-                  source={{uri:'data:image/jpeg;base64,' +item.image}}
+                  source={{uri:item.image}}
                   style={styles.image}
                 />
                 <Text h5 color="grey">
